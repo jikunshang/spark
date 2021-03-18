@@ -83,7 +83,8 @@ object TPCDSQueryBenchmark extends SqlBasedBenchmark {
         case _ =>
       }
       val numRows = queryRelations.map(tableSizes.getOrElse(_, 0L)).sum
-      val benchmark = new Benchmark(s"TPCDS Snappy", numRows, 2, output = output)
+      val benchmark = new Benchmark(s"TPCDS Snappy", numRows, 2,
+        output = output, outputPerIteration = true)
       benchmark.addCase(s"$name$nameSuffix") { _ =>
         spark.sql(queryString).noop()
       }
