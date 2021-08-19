@@ -382,6 +382,11 @@ package object config {
     .toSequence
     .createWithDefault(Nil)
 
+  private[spark] val CUSTOM_COMMAND_PREFIX = ConfigBuilder("spark.yarn.custom.command.prefix")
+    .version("3.0.1")
+    .stringConf
+    .createWithDefault("")
+
   private[yarn] val YARN_EXECUTOR_RESOURCE_TYPES_PREFIX = "spark.yarn.executor.resource."
   private[yarn] val YARN_DRIVER_RESOURCE_TYPES_PREFIX = "spark.yarn.driver.resource."
   private[yarn] val YARN_AM_RESOURCE_TYPES_PREFIX = "spark.yarn.am.resource."

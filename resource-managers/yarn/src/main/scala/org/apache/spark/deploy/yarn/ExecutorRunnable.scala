@@ -37,6 +37,7 @@ import org.apache.hadoop.yarn.ipc.YarnRPC
 import org.apache.hadoop.yarn.util.Records
 
 import org.apache.spark.{SecurityManager, SparkConf, SparkException}
+import org.apache.spark.deploy.yarn.config._
 import org.apache.spark.internal.Logging
 import org.apache.spark.internal.config._
 import org.apache.spark.network.util.JavaUtils
@@ -200,9 +201,12 @@ private[yarn] class ExecutorRunnable(
       Seq("--user-class-path", "file:" + absPath)
     }.toSeq
 
+    val customCommondPrefix: String = sparkConf.get(CUSTOM_COMMAND_PREFIX)
+    val s = customCommondPrefix.replaceAll(",", " ")
+
     YarnSparkHadoopUtil.addOutOfMemoryErrorArgument(javaOpts)
     val commands = prefixEnv ++
-      Seq(Environment.JAVA_HOME.$$() + "/bin/java", "-server") ++
+      Seq(s + " " + Environment.JAVA_HOME.$$() + "/bin/java", "-server") ++
       javaOpts ++
       Seq("org.apache.spark.executor.YarnCoarseGrainedExecutorBackend",
         "--driver-url", masterAddress,
